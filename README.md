@@ -1,28 +1,57 @@
-# 🔍 WatsonX Code Review Bot
+# 🔍 WatsonX Code Review Automation
 
-This project automatically reviews the **last commit** using **WatsonX** for any added/modified `.js` files in a GitLab push event.
+A Node.js-based intelligent code review system that analyzes the latest GitLab commit using IBM WatsonX, and emails a structured review report to the developer. Designed to integrate into CI/CD pipelines or run standalone.
+
+---
 
 ## 🚀 Features
 
-- Automatically fetches latest committed `.js` files (added/modified).
-- Calls WatsonX LLM to analyze and provide detailed code review.
-- Sends review summary via Outlook email.
-- Supports GitLab Webhooks.
+- 🔄 **Auto-triggered on Git push** via GitLab/GitHub webhook.
+- 🧠 **WatsonX LLM Integration** for intelligent Node.js code analysis.
+- 📩 **Email Delivery** of review to last commit author using Nodemailer & Outlook SMTP.
+- 📁 **GitLab API** for fetching raw code content for modified files.
+- 🛠️ Built for **modular use** and **easy integration** in enterprise-grade systems.
 
 ---
 
-## 🏗️ Architecture
+## 🧠 How It Works
 
-1. GitLab webhook receives a **push** event.
-2. The `gitReview.model.js`:
-   - Identifies `.js` files in the last commit.
-   - Fetches raw file content from GitLab using GitLab API.
-   - Generates a code review prompt and calls WatsonX.
-   - Sends review summary via email using **Outlook SMTP**.
+1. A push event triggers the Git webhook.
+2. The system identifies the last commit and modified `.js` files.
+3. For each file:
+   - Fetches raw source from GitLab.
+   - Sends the code to WatsonX for review.
+4. WatsonX returns detailed suggestions.
+5. A formatted report is created and emailed to the committer.
 
 ---
 
-## 🛠️ Configuration
+## 🗂️ Folder Structure
 
-### Setup `.env`:
-
+```plaintext
+watsonx-code-review-bot/
+├── server/
+│   ├── controllers/
+│   │   └── gitWebhook/
+│   │       └── gitWebhook.controller.js
+│   ├── helpers/
+│   │   ├── config/
+│   │   │   ├── dbconfig.js
+│   │   │   ├── utilsconfig.js
+│   │   │   └── VCAP_SERVICES.json
+│   │   ├── logger/
+│   │   │   └── logger.js
+│   │   ├── resource/
+│   │   │   ├── db-script/
+│   │   │   │   └── db-script.json
+│   │   │   └── errorcode/
+│   │   │       └── error-code.js
+│   ├── models/
+│   │   ├── watsonapi/
+│   │   │   └── gitWebhook.model.js
+│   │   └── customer/
+│   │       ├── registerDongle.model.js
+│   │       └── verifyContactNo.model.js
+├── package.json
+├── package-lock.json
+├── README.md
